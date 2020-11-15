@@ -6,9 +6,11 @@ import mask from './images/mask.jpg';
 import t1 from './images/t.png';
 import t2 from './images/t1.png';
 import gsap from 'gsap';
+import * as dat from "dat.gui";
 
 
 let OrbitControls = require("three-orbit-controls")(THREE);
+
 
 export default class Sketch {
     constructor() {
@@ -19,7 +21,7 @@ export default class Sketch {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('container').appendChild(this.renderer.domElement);
 
-        this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 3000);
+        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 3000);
         this.camera.position.z = 1000;
 
         this.scene = new THREE.Scene();
@@ -39,11 +41,22 @@ export default class Sketch {
         // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
 
+        this.settings();
         this.addMesh();
 
 
         this.mouseEffects();
         this.render();
+    }
+
+
+    settings() {
+        let that = this;
+        this.settings = {
+            progress: 0,
+        };
+        this.gui = new dat.GUI();
+        this.gui.add(this.settings, "progress", 0, 1, 0.01);
     }
 
     mouseEffects() {
@@ -53,22 +66,24 @@ export default class Sketch {
         );
 
         window.addEventListener('mousedown', (e) => {
-           gsap.to(this.material.uniforms.mousePressed, {
-               duration:0.5,
-               value:1
-           })
+            gsap.to(this.material.uniforms.mousePressed, {
+                duration: 1,
+                value: 1,
+                ease: "elastic.out(1, 0.3)"
+            });
         });
 
         window.addEventListener('mouseup', (e) => {
             gsap.to(this.material.uniforms.mousePressed, {
-                duration:0.5,
-                value:0
-            })
+                duration: 1,
+                value: 0,
+                ease: "elastic.out(1, 0.3)"
+            });
         });
 
         window.addEventListener('mousewheel', (e) => {
             console.log(e.wheelDeltaY);
-            this.move += e.wheelDeltaY / 1000;
+            this.move += e.wheelDeltaY / 4000;
         });
 
         window.addEventListener('mousemove', (event) => {
@@ -117,6 +132,10 @@ export default class Sketch {
                 },
                 mouse: {
                     type: "v2",
+                    value: null
+                },
+                transition: {
+                    type: "f",
                     value: null
                 },
                 move: {
@@ -191,8 +210,15 @@ export default class Sketch {
         // this.mesh.rotation.y += 0.02;
 
         // console.log(this.time)
+        let next = Math.floor(this.move + 40) % 2;
+        let prev = (Math.floor(this.move) + 1 + 40) % 2;
+
+
+        this.material.uniforms.t1.value = this.textures[prev];
+        this.material.uniforms.t2.value = this.textures[next];
 
         this.material.uniforms.time.value = this.time;
+        this.material.uniforms.transition.value = this.settings.progress;
         this.material.uniforms.move.value = this.move;
         this.material.uniforms.mouse.value = this.point;
 
