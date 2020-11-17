@@ -1,4 +1,4 @@
-import * as THREE from './node_modules/three/build/three.module.js';
+import * as THREE from 'three';
 import fragment from './shaders/fragment.glsl';
 import vertex from './shaders/vertex.glsl';
 
@@ -41,6 +41,8 @@ export default class Sketch {
         // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
 
+        // var scope = this;
+
         this.settings();
         this.addMesh();
 
@@ -48,6 +50,7 @@ export default class Sketch {
         this.mouseEffects();
         this.render();
     }
+
 
 
     settings() {
