@@ -46085,9 +46085,9 @@ var Sketch = /*#__PURE__*/function () {
 
         var intersects = _this.raycaster.intersectObjects([_this.test]); // let intersec
         // console.log(intersects[0].point);
-        // this.point.x = intersects[0].point.x;
 
 
+        _this.point.x = intersects[0].point.x;
         _this.point.y = intersects[0].point.y;
       }, false);
     }
@@ -46237,7 +46237,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34089" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32937" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
